@@ -1,6 +1,6 @@
 {
     "routers": ["R1, "R2"],
-    "switches": ["SW1"]
+    "switches": ["SW1"],
     "clients": ["PC1", "PC2"],
     "servers": ["Server1"]
 }
