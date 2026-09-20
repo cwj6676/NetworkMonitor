@@ -35,7 +35,7 @@ for check in range(1, 6):
             )
     # 장애 상태    
         else:
-            failure_counts[device] += 1
+            
             if failure_counts[device] >= 3:
                 print(
                     device,
