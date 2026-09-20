@@ -1,8 +1,8 @@
 {
     "R1": "WARNING",
-    "R2": "DOWN",
+    "R2": "UP",
     "SW1": "UP",
-    "PC1": "DOWN",
-    "PC2": "UP",
+    "PC1": "WARNING",
+    "PC2": "DOWN",
     "Server1": "UP"
 }
