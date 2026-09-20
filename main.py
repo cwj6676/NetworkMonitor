@@ -29,7 +29,6 @@ devices.update(device_data["switches"])
 devices.update(device_data["clients"])
 devices.update(device_data["servers"])
 
-
 # 연속 실패 횟수
 failure_counts = {}
 
@@ -50,12 +49,16 @@ down_status = {}
 for device in devices:
     down_status[device] = False
 
+#현재 상태 저장
+current_status = {}
+
+for device in devices:
+    current_status[device] = "UNKNOWN"
 
 # 체크 주기
 check_interval = 2
 
 print("NetworkMonitor Started")
-
 
 # 모니터링 반복
 for check in range(1, 6):
@@ -71,6 +74,7 @@ for check in range(1, 6):
             if down_status[device] == True:
                 recovery_time = time.time()
                 downtime = recovery_time - down_times[device]
+                current_status[device] = "UP"
 
                 print(
                     device,
@@ -96,6 +100,9 @@ for check in range(1, 6):
 
             # 품질 경고
             if packet_loss >= 10 or latency >= 80:
+                
+                current_status[device] = "WARNING"
+
                 print(
                     device,
                     device_ip,
@@ -108,6 +115,8 @@ for check in range(1, 6):
                 )
 
             else:
+                current_status[device] = "UP"
+
                 print(
                     device,
                     device_ip,
@@ -124,6 +133,8 @@ for check in range(1, 6):
             failure_counts[device] += 1
 
             if failure_counts[device] >= 3:
+                current_status[device] = "DOWN"
+
                 if down_status[device] == False:
                     down_times[device] = time.time()
 
@@ -146,6 +157,9 @@ for check in range(1, 6):
                 )
 
             else:
+
+                current_status[device] = "WARNING"
+
                 print(
                     device,
                     ": WARNING",
@@ -154,3 +168,11 @@ for check in range(1, 6):
                 )
 
     time.sleep(check_interval)
+
+print("\n=== Current Status ===")
+
+for device in devices:
+    print(device, devices[device], ":", current_status[device])
+
+with open("status.json", "w") as file:
+    json.dump(current_status, file, indent=4)
