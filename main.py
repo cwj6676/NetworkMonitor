@@ -2,29 +2,52 @@ import random
 # 장비 목록
 devices = ["R1", "R2", "SW1", "Server1"]
 
-print("NetworkMonitor Started")
-# 장비 상태 확인
-for device in devices:
-    status = random.choice(["UP", "DOWN"])
-    # 정상 상태
-    if status == "UP":
-        latency = random.randint(1, 100)
-        packet_loss = random.choice([0, 0, 0, 5, 10])
+# 연속 실패 횟수
+failure_counts = {}
 
-        print(
-            device,
-            ":",
-            status,
-            "| Latency:",
-            latency,
-            "ms",
-            "| Packet Loss:",
-            str(packet_loss) + "%"
-        )
+for device in devices:
+    failure_counts[device] = 0
+
+print("NetworkMonitor Started")
+
+# 모니터링 반복
+for check in range(1, 6):
+    print("\nCheck", check)
+    # 정상 상태
+    for device in devices:
+        status = random.choice(["UP", "UP", "UP" "DOWN"])
+
+        if status == "UP":
+            failure_counts[device] = 0
+
+            latency = random.randint(1, 100)
+            packet_loss = random.choice([0, 0, 0, 5, 10])
+
+            print(
+                device,
+                ":",
+                status,
+                "| Latency:",
+                latency,
+                "ms",
+                "| Packet Loss:",
+                str(packet_loss) + "%"
+            )
     # 장애 상태    
-    else:
-        print(device,
-        ":",
-        status,
-        "| Latency: -"
-        "| Packet Loss: 100%")
+        else:
+            failure_counts[device] += 1
+            if failure_counts[device] >= 3:
+                print(
+                    device,
+                    ": DOWN",
+                    "| Consecutive Failures:",
+                    failure_counts[device]
+                )
+            
+            else:
+                print(
+                    device,
+                    ": WARNING",
+                    "| Consecutive Failures:",
+                    failure_counts[device]
+                )
