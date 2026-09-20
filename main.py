@@ -5,12 +5,12 @@ import json
 with open("devices.json", "r") as file:
     device_data = json.load(file)
 
-devices = []
+devices = {}
 
-devices += device_data["routers"]
-devices += device_data["switches"]
-devices += device_data["clients"]
-devices += device_data["servers"]
+devices.update(device_data["routers"])
+devices.update(device_data["switches"])
+devices.update(device_data["clients"])
+devices.update(device_data["servers"])
 
 # 연속 실패 횟수
 failure_counts = {}
@@ -38,6 +38,7 @@ check_interval = 2
 for check in range(1, 6):
     print("\nCheck", check)
     for device in devices:
+        device_ip = devices[device]
     # 정상 상태
 
         status = random.choice(["UP", "UP", "UP", "DOWN"])
