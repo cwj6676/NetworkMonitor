@@ -2,9 +2,22 @@ import random
 import time
 import json
 
+
+# 장비 상태 확인
 def check_device(device_ip):
     status = random.choice(["UP", "UP", "UP", "DOWN"])
-    return status
+
+    if status == "UP":
+        latency = random.randint(1, 100)
+        packet_loss = random.choice([0, 0, 0, 5, 10])
+
+    else:
+        latency = None
+        packet_loss = 100
+
+    return status, latency, packet_loss
+
+
 # 장비 목록 불러오기
 with open("devices.json", "r") as file:
     device_data = json.load(file)
@@ -16,18 +29,20 @@ devices.update(device_data["switches"])
 devices.update(device_data["clients"])
 devices.update(device_data["servers"])
 
+
 # 연속 실패 횟수
 failure_counts = {}
 
 for device in devices:
     failure_counts[device] = 0
 
-print("NetworkMonitor Started")
+
 # 장애 시작 시간
 down_times = {}
 
 for device in devices:
     down_times[device] = None
+
 
 # 장애 상태 기록
 down_status = {}
@@ -35,17 +50,23 @@ down_status = {}
 for device in devices:
     down_status[device] = False
 
+
 # 체크 주기
 check_interval = 2
+
+print("NetworkMonitor Started")
+
 
 # 모니터링 반복
 for check in range(1, 6):
     print("\nCheck", check)
+
     for device in devices:
         device_ip = devices[device]
-    # 정상 상태
 
-        status = check_device(device_ip)
+        status, latency, packet_loss = check_device(device_ip)
+
+        # 정상 상태
         if status == "UP":
             if down_status[device] == True:
                 recovery_time = time.time()
@@ -58,34 +79,62 @@ for check in range(1, 6):
                     round(downtime, 2),
                     "seconds"
                 )
-            
+
                 with open("logs.txt", "a") as log_file:
-                    log_file.write(device + " " + device_ip + " RECOVERED | " + time.strftime("%H:%M:%S") + "| Downtime: " + str(round(downtime, 2)) + " seconds\n")
+                    log_file.write(
+                        device + " " +
+                        device_ip +
+                        " RECOVERED | " +
+                        time.strftime("%H:%M:%S") +
+                        " | Downtime: " +
+                        str(round(downtime, 2)) +
+                        " seconds\n"
+                    )
+
             down_status[device] = False
             failure_counts[device] = 0
 
-            latency = random.randint(1, 100)
-            packet_loss = random.choice([0, 0, 0, 5, 10])
+            # 품질 경고
+            if packet_loss >= 10 or latency >= 80:
+                print(
+                    device,
+                    device_ip,
+                    ": WARNING",
+                    "| Latency:",
+                    latency,
+                    "ms",
+                    "| Packet Loss:",
+                    str(packet_loss) + "%"
+                )
 
-            print(
-                device,
-                ":",
-                status,
-                "| Latency:",
-                latency,
-                "ms",
-                "| Packet Loss:",
-                str(packet_loss) + "%"
-            )
-    # 장애 상태    
+            else:
+                print(
+                    device,
+                    device_ip,
+                    ": UP",
+                    "| Latency:",
+                    latency,
+                    "ms",
+                    "| Packet Loss:",
+                    str(packet_loss) + "%"
+                )
+
+        # 장애 상태
         else:
-            failure_counts[device] += 1            
+            failure_counts[device] += 1
+
             if failure_counts[device] >= 3:
                 if down_status[device] == False:
                     down_times[device] = time.time()
 
                     with open("logs.txt", "a") as log_file:
-                        log_file.write(device + " " + device_ip + " DOWN | " + time.strftime("%H:%M:%S") + "\n")
+                        log_file.write(
+                            device + " " +
+                            device_ip +
+                            " DOWN | " +
+                            time.strftime("%H:%M:%S") +
+                            "\n"
+                        )
 
                 down_status[device] = True
 
@@ -95,7 +144,7 @@ for check in range(1, 6):
                     "| Consecutive Failures:",
                     failure_counts[device]
                 )
-            
+
             else:
                 print(
                     device,
@@ -103,4 +152,5 @@ for check in range(1, 6):
                     "| Consecutive Failures:",
                     failure_counts[device]
                 )
+
     time.sleep(check_interval)
