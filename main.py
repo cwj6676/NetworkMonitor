@@ -44,7 +44,6 @@ for check in range(1, 6):
         if status == "UP":
             if down_status[device] == True:
                 recovery_time = time.time()
-
                 downtime = recovery_time - down_times[device]
 
                 print(
@@ -55,6 +54,8 @@ for check in range(1, 6):
                     "seconds"
                 )
             
+                with open("logs.txt", "a") as log_file:
+                    log_file.write(device + " RECOVERED | " + time.strftime("%H:%M:%S") + "| Downtime: " + str(round(downtime, 2)) + " seconds\n")
             down_status[device] = False
             failure_counts[device] = 0
 
@@ -77,6 +78,9 @@ for check in range(1, 6):
             if failure_counts[device] >= 3:
                 if down_status[device] == False:
                     down_times[device] = time.time()
+
+                    with open("logs.txt", "a") as log_file:
+                        log_file.write(device + " DOWN | " + time.strftime("%H:%M:%S") + "\n")
 
                 down_status[device] = True
 
