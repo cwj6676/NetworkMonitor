@@ -1,6 +1,10 @@
 import random
 import time
 import json
+
+def check_device(device_ip):
+    status = random.choice(["UP", "UP", "UP", "DOWN"])
+    return status
 # 장비 목록 불러오기
 with open("devices.json", "r") as file:
     device_data = json.load(file)
@@ -41,7 +45,7 @@ for check in range(1, 6):
         device_ip = devices[device]
     # 정상 상태
 
-        status = random.choice(["UP", "UP", "UP", "DOWN"])
+        status = check_device(device_ip)
         if status == "UP":
             if down_status[device] == True:
                 recovery_time = time.time()
@@ -56,7 +60,7 @@ for check in range(1, 6):
                 )
             
                 with open("logs.txt", "a") as log_file:
-                    log_file.write(device + " RECOVERED | " + time.strftime("%H:%M:%S") + "| Downtime: " + str(round(downtime, 2)) + " seconds\n")
+                    log_file.write(device + " " + device_ip + " RECOVERED | " + time.strftime("%H:%M:%S") + "| Downtime: " + str(round(downtime, 2)) + " seconds\n")
             down_status[device] = False
             failure_counts[device] = 0
 
@@ -81,7 +85,7 @@ for check in range(1, 6):
                     down_times[device] = time.time()
 
                     with open("logs.txt", "a") as log_file:
-                        log_file.write(device + " DOWN | " + time.strftime("%H:%M:%S") + "\n")
+                        log_file.write(device + " " + device_ip + " DOWN | " + time.strftime("%H:%M:%S") + "\n")
 
                 down_status[device] = True
 
