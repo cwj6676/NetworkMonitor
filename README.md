@@ -1,5 +1,44 @@
 # NetworkMonitor
 
+> **Live monitoring companion project for NetFaultLab**
+>
+> Observes real Containerlab state and connectivity to detect `WARNING`, `DOWN`, and `RECOVERED` events.
+
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![Docker](https://img.shields.io/badge/Docker-Monitoring-blue)
+![Mode](https://img.shields.io/badge/Mode-Real%20Lab-brightgreen)
+![Output](https://img.shields.io/badge/Output-JSON%20%7C%20Logs-lightgrey)
+
+## Project at a Glance
+
+| Item | Details |
+|---|---|
+| Goal | Live monitoring of NetFaultLab |
+| Data Source | `lab_state.json` + direct Docker/Containerlab checks |
+| Client Check | Real ping to server |
+| Server Check | Ping to default gateway |
+| Router/Switch Check | Container and lab-facing interface state |
+| States | `UP`, `WARNING`, `DOWN`, `RECOVERED` |
+
+## Example Output
+
+```text
+[00:42:24] PC2       CLIENT   WARNING   | Failure 1/3
+[00:42:26] PC2       CLIENT   WARNING   | Failure 2/3
+[00:42:28] PC2       CLIENT   DOWN
+[00:42:41] PC2       CLIENT   RECOVERED | Downtime: 13.02 seconds
+```
+
+## Table of Contents
+
+- [Features](#features)
+- [How It Works](#how-it-works)
+- [Device Checks](#device-checks)
+- [Status Logic](#status-logic)
+- [Dynamic Topology Refresh](#dynamic-topology-refresh)
+- [Usage](#usage)
+- [Current Limitations](#current-limitations)
+
 NetworkMonitor is a companion monitoring project for NetFaultLab. It reads the currently active NetFaultLab topology, checks the real Containerlab environment, and reports device and connectivity state changes.
 
 Unlike the original simulation-only prototype, the current version monitors the live lab created by NetFaultLab.

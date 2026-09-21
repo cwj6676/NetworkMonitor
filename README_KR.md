@@ -1,5 +1,44 @@
 # NetworkMonitor
 
+> **NetFaultLab 실시간 모니터링 companion 프로젝트**
+>
+> 실제 Containerlab 상태와 Ping 결과를 확인하여 `WARNING`, `DOWN`, `RECOVERED` 이벤트를 감지합니다.
+
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![Docker](https://img.shields.io/badge/Docker-Monitoring-blue)
+![Mode](https://img.shields.io/badge/Mode-Real%20Lab-brightgreen)
+![Output](https://img.shields.io/badge/Output-JSON%20%7C%20Logs-lightgrey)
+
+## 프로젝트 한눈에 보기
+
+| 항목 | 내용 |
+|---|---|
+| 목적 | NetFaultLab 실시간 상태 감시 |
+| 데이터 소스 | `lab_state.json` + Docker/Containerlab 직접 확인 |
+| Client 검사 | Server까지 실제 Ping |
+| Server 검사 | Default Gateway Ping |
+| Router/Switch 검사 | Container 및 Lab-facing Interface 상태 |
+| 상태 | `UP`, `WARNING`, `DOWN`, `RECOVERED` |
+
+## 동작 예시
+
+```text
+[00:42:24] PC2       CLIENT   WARNING   | Failure 1/3
+[00:42:26] PC2       CLIENT   WARNING   | Failure 2/3
+[00:42:28] PC2       CLIENT   DOWN
+[00:42:41] PC2       CLIENT   RECOVERED | Downtime: 13.02 seconds
+```
+
+## 목차
+
+- [주요 기능](#주요-기능)
+- [동작 구조](#동작-구조)
+- [장비별 확인 방식](#장비별-확인-방식)
+- [상태 판단 방식](#상태-판단-방식)
+- [동적 토폴로지 갱신](#동적-토폴로지-갱신)
+- [실행 방법](#실행-방법)
+- [현재 한계](#현재-한계)
+
 NetworkMonitor는 NetFaultLab과 연동되는 실시간 네트워크 모니터링 프로젝트입니다.
 
 NetFaultLab이 생성한 현재 토폴로지를 읽고, 실제 Containerlab 환경의 컨테이너 상태, 인터페이스 상태, Ping 결과를 확인하여 장비 상태 변화를 감지합니다.
