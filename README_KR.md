@@ -4,9 +4,13 @@
 >
 > 실제 Containerlab 상태와 Ping 결과를 확인하여 `WARNING`, `DOWN`, `RECOVERED` 이벤트를 감지합니다.
 
+> 🚧 **현재 개발 중인 프로젝트입니다.**
+>
+> NetFaultLab 실시간 모니터링, 동적 장비 갱신, 상태 변화 감지 기능은 구현되어 있으며, 모니터링 범위, UI, 테스트, 문서화를 계속 개선하고 있습니다.
+
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
 ![Docker](https://img.shields.io/badge/Docker-Monitoring-blue)
-![Mode](https://img.shields.io/badge/Mode-Real%20Lab-brightgreen)
+![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
 ![Output](https://img.shields.io/badge/Output-JSON%20%7C%20Logs-lightgrey)
 
 ## 프로젝트 한눈에 보기

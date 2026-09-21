@@ -4,9 +4,13 @@
 >
 > Observes real Containerlab state and connectivity to detect `WARNING`, `DOWN`, and `RECOVERED` events.
 
+> 🚧 **This project is currently under active development.**
+>
+> Live NetFaultLab monitoring, dynamic device refresh, and status-change detection are implemented, while monitoring coverage, UI, testing, and documentation are still being improved.
+
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
 ![Docker](https://img.shields.io/badge/Docker-Monitoring-blue)
-![Mode](https://img.shields.io/badge/Mode-Real%20Lab-brightgreen)
+![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
 ![Output](https://img.shields.io/badge/Output-JSON%20%7C%20Logs-lightgrey)
 
 ## Project at a Glance
